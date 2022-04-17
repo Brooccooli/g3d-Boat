@@ -9,21 +9,30 @@ local background = g3d.newModel("assets/sphere.obj", "assets/Sky.png", nil, nil,
 
 local timer = 0
 
-local zoom = 0.01
-local pos = {x = 0, y = 0}
-local speed = 1
+local pos = { x = 0, y = 0 }
+local speed = 0.005
+local maxSpeed = 1.5
+local velocity = 0
 
 -- Settings
 local fullscreen = false
+local funcs = require "Function"
 local oldFKey = love.keyboard.isDown('f')
 
 function love.load()
-    love.window.setMode(800, 600, {depth=1, minwidth=800, minheight=600, resizable=true})
+    love.window.setMode(800, 600, { depth = 1, minwidth = 800, minheight = 600, resizable = true })
     love.mouse.setRelativeMode(true)
     love.mouse.setGrabbed(true)
 end
 
 function love.update(dt)
+    funcs.resetDebug()
+
+    if love.keyboard.isDown('lctrl') then
+        g3d.camera.firstPersonMovement(dt)
+        return
+    end
+
     timer = timer + dt
 
     ocean.Update(dt)
@@ -33,23 +42,37 @@ function love.update(dt)
         love.window.setFullscreen(fullscreen)
     end
 
-    if love.keyboard.isDown('w') then pos.x = pos.x + speed end
+    if love.keyboard.isDown('w') and velocity < maxSpeed then
+         velocity = velocity + speed 
+    elseif velocity > 0 then
+        velocity = velocity - (speed / 2)
+    else
+        velocity = 0
+    end
 
-    --g3d.camera.firstPersonMovement(dt)
+    funcs.debugString("Velocity: " ..  (1.5 - (velocity)))
+
+    pos.x = pos.x + velocity
+
     if love.keyboard.isDown "escape" then
         love.event.push "quit"
     end
 
-    
+
     oldFKey = love.keyboard.isDown('f')
 end
 
 function love.draw()
     --ocean.draw(offsetX, offsetY, zoom, timer)
-    ocean.draw(pos.x + timer, pos.y, zoom, timer)
-    background:draw()
+    ocean.draw(pos.x + timer, pos.y, velocity, timer)
+    --background:draw()
+
+    funcs.DebugWrite()
 end
 
-function love.mousemoved(x,y, dx,dy)
-    --g3d.camera.firstPersonLook(dx,dy)
+
+function love.mousemoved(x, y, dx, dy)
+    mouse.x, mouse.y = mouse.x - dx, mouse.y - dy
+    funcs.debugString("MOVED")
 end
+
