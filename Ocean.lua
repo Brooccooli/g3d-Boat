@@ -35,10 +35,10 @@ function Ocean.draw(offsetX, offsetY, velocity, timer)
 
             if (math.floor(z * 8) % 2) == 0 then
                 darkWater:setTranslation(newPos.x, newPos.y, newPos.z - 50)
-                darkWater:draw()
+                darkWater:draw(myShader)
             else
                 water:setTranslation(newPos.x, newPos.y, newPos.z - 50)
-                water:draw()
+                water:draw(myShader)
             end
             love.graphics.setColor(1, 1, 1)
 

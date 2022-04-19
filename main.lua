@@ -23,6 +23,8 @@ function love.load()
     love.window.setMode(800, 600, { depth = 1, minwidth = 800, minheight = 600, resizable = true })
     love.mouse.setRelativeMode(true)
     love.mouse.setGrabbed(true)
+
+    g3d.camera.position[3] = 1000
 end
 
 function love.update(dt)
@@ -72,7 +74,9 @@ end
 
 
 function love.mousemoved(x, y, dx, dy)
-    mouse.x, mouse.y = mouse.x - dx, mouse.y - dy
-    funcs.debugString("MOVED")
+    g3d.camera.firstPersonLook(dx, dy)
+
+    --mouse.x, mouse.y = mouse.x - dx, mouse.y - dy
+    --uncs.debugString("MOVED")
 end
 

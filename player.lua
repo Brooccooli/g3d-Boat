@@ -38,19 +38,16 @@ end
 function player.update(dt)
     player.rotation.z, mY = -love.mouse.getX() * 0.01, math.max(0, math.min((love.mouse.getY() - 200) * 0.05, 100)) * 0.1
 
-    --[[g3d.camera.lookAt(player.position.x + math.cos(player.rotation.z) * (mY + 10 * cameraZoom), 
+    g3d.camera.lookAt(player.position.x + math.cos(player.rotation.z) * (mY + 10 * cameraZoom), 
     player.position.y + math.sin(player.rotation.z)  * (mY + 10 * cameraZoom),
      player.position.z + ((mY * 2) * cameraZoom * 3) + 5,
-     player.position.x , player.position.y, player.position.z)]]--
+     player.position.x , player.position.y, player.position.z)
 end
 
 
 
 function player.draw()
     local direction, pitch = g3d.camera.getDirectionPitch()
-
-
-    g3d.camera.lookInDirection(player.position.x, player.position.y, player.position.z, mouse.x * 0.01, mouse.y * 0.01)
     player.model:setTranslation(player.position.x, player.position.y, player.position.z)
     --player.model:draw()
     player.sword:setTranslation(player.position.x + math.cos(direction + 1), player.position.y + math.sin(direction + 1), player.position.z)
@@ -61,6 +58,8 @@ function player.draw()
     love.graphics.setColor(0.8, 0.8, 0.8)
     player.swordHandle:draw()
     love.graphics.setColor(1, 1, 1)
+
+    --g3d.camera.lookInDirection(player.position.x, player.position.y, player.position.z, mouse.x * 0.01, mouse.y * 0.01)
 end
 
 
